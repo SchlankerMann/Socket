@@ -1,8 +1,8 @@
 #include <errno.h>
 
-void errore(char *msg, int ret_code)
+void errore(char*str,int n)
 {
-    printf(msg);
-    printf("errcode : %d (%s)\n", errno,strerror(errno));
-    exit(ret_code);
+    printf(str);
+    printf("%s(%d)\n",strerror(errno),errno);
+    exit(n);
 }
