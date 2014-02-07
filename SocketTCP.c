@@ -19,7 +19,9 @@ int main (int argc, char* argv[])
 	int sockId;
 	int connId;
 	int len_addr;
+	int len_msg;
 	int ret_code;
+	int sock_addr;
 	int i;
 	
 	Addr *myself_addr,*client_addr;
@@ -38,9 +40,9 @@ int main (int argc, char* argv[])
 
 	printf("Associo il socket alla porta%d.....\n",port);
 
-	myself_addr=((Addr*) malloc(sizeof(Addr));
+	myself_addr=((Addr*) malloc(sizeof(Addr)));
 
-	myself_adr->sin_family=AF_INET;
+	myself_addr->sin_family=AF_INET;
 
 	inet_aton(MYSELF_IP,&(myself_addr->sin_addr));
 
@@ -60,7 +62,7 @@ int main (int argc, char* argv[])
 	len_addr=sizeof (Addr);
 	client_addr=(Addr*) malloc (sizeof(Addr));
 
-	connId = accept(sock_id,(struct sockaddr*) client_addr,(socklen_t*)&len_addr);
+	connId = accept(sockId,(struct sockaddr*) client_addr,(socklen_t*)&len_addr);
 
 	if(connId<=0)  		errore("ERRORE nell'accettare la connessione\n",-5);
 
@@ -76,8 +78,8 @@ int main (int argc, char* argv[])
 	
 	len_msg=strlen(msg+1);
 
-	ret_code=send(conn_id,msg,len_msg,0);
-	if(ret_code != len_msg)  		errore("ERRORE durante l'invio della risposta al client\n",-7);
+	ret_code=send(connId,msg,len_msg,0);
+	if(ret_code != len_msg)  		errore("ERRORE durante  l'invio della risposta al client\n",-7);
 
 	printf("Chiudo la connessione...\n");
 	close(connId);
@@ -87,6 +89,7 @@ int main (int argc, char* argv[])
 	
 	free(client_addr);
 	free(myself_addr);
-	return 0;
-
+	
+return 0;
+	
 }
