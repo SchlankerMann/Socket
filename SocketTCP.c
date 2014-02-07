@@ -84,6 +84,8 @@ int main (int argc, char* argv[])
 	printf("Chiudo il socket...\n");
 	shutdown(sockId,SHUT_RDWR);
 	
+	free(client_addr);
+	free(myself_addr);
 	return 0;
 
 }
