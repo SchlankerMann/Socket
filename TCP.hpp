@@ -21,7 +21,7 @@
  */
 
 class Socket {
-	private int sock_id;
+	private: int sock_id;
 	Socket(int mode);//socket()
 	~Socket();//shutdown()
 };
