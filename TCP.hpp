@@ -22,26 +22,26 @@
 
 class Socket {
 	private int sock_id;
-	Socket(int mode);
-	~Socket();
+	Socket(int mode);//socket()
+	~Socket();//shutdown()
 };
 
-class socketUDP::public Socket{
+class socketUDP:public Socket{
 	private:
 	public:		SocketUDP();
 			~SocketUDP();
-			bool invia(char*,Address*);
-			char* ricevi(Address*);
+			bool invia(char*,Address*);//send()
+			char* ricevi(Address*);//recv()
 }; 
 
-class ClientUDP::public Socket{
+class ClientUDP:public Socket{
 	private:
 	public:		ClientUDP();
 			~ClientUDP();
 			
 };
 
-class ServerUDP::public Socket{
+class ServerUDP:public Socket{
 	private:
 	public:		ServerUDP(int port);
 			~ClientUDP();
@@ -49,27 +49,63 @@ class ServerUDP::public Socket{
 };
 
 class SocketTCP::public Socket {
-	public:		SocketUDP();
-			~SocketUDP();
+	public:		SocketTCP();
+			~SocketTCP();
 }; 
 
-class ClientTCP::public Socket{	
+class ClientTCP:public Socket{	
 	private:	Connessione* connessione;
 	public:		ClientTCP();
 			~ClientTCP();
-			bool connetti(Address* server);
+			bool connetti(Address* server);//connect()
 			bool close_connessione();
-			bool invia(char* msg);
-			char* ricevi();
+			bool invia(char* msg);//
+			char* ricevi()/*{
+					return connessione->ricevi();
+				      }*/;
 };
-class ServerTCP::Public Socket
+class ServerTCP:Public Socket
 	private:	Lista* lista_connessioni;
-	public:		ClientTCP(int port);
-			~ClientTCP();
+	public:		ServerTCP(int port);//bind()-listen()
+			~ServerTCP();
 			Connessione* accettata();
 			void close_tutte_connessioni();
 };			
 
-class Connessione{
+class Connessione:public Nodo {
 	private:	int conn_id;
-			
+	public:		Connessione(int conn_id);
+			~Connessione();
+			bool invia(char* msg);//send()
+			char* ricevi();//recv()
+};
+				
+class Conn_Client:public Connessione {
+	public:		Conn_Client(int sock_id);
+			~Conn_Client();//cippa
+};
+
+class Conn_Server:public Connessione {
+	public:		Conn_Server(int conn_id);
+			~Conn_Server();//close()
+};
+
+class Lista{
+	private:	Nodo* first;
+			void remove_Node(Nodo* curr) {
+							if (curr){
+								remove_Node(curr->get_next());
+								deletedelete(curr);
+							}
+						     }
+	public:		Lista();
+			~Lista(){remove_Node(first);}
+};
+
+class Nodo{
+	private:	Nodo* _next;
+	public:		Nodo(Nodo* next);
+			~Nodo();		
+			void set_next(Nodo*);
+			Nodo* get_next();
+};
