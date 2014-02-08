@@ -80,6 +80,8 @@ class Nodo{
 			Nodo* get_next();
 };
 
+class Iterator;
+
 class Lista{
 	private:	Nodo* first;
 			void remove_Node(Nodo* curr) {
@@ -90,8 +92,21 @@ class Lista{
 						     }
 	public:		Lista();
 			~Lista(){remove_Node(first);}
+			Nodo* add_node(Nodo*);
+			Iterator* create_iterator();
 };			
 
+class Iterator{
+	private:	Lista* lista;
+			Nodo* current;
+	public:		Iterator(Lista* lista);
+			~Iterator();
+			Nodo* get_current();
+			Nodo* move_next();
+			Nodo* move_first();
+			bool is_done;
+};
+		
 class Connessione:public Nodo {
 	private:	int conn_id;
 	public:		Connessione(int conn_id);
@@ -109,3 +124,7 @@ class Conn_Server:public Connessione {
 	public:		Conn_Server(int conn_id);
 			~Conn_Server();//close()
 };
+
+
+/*Iterator* it;
+for( it=lista->create_Iterator();elemento = it->move_next(); elemento->do_something())*/
