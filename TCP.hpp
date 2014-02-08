@@ -70,6 +70,26 @@ class ServerTCP:Public Socket
 			~ServerTCP();
 			Connessione* accettata();
 			void close_tutte_connessioni();
+};
+
+class Nodo{
+	private:	Nodo* _next;
+	public:		Nodo(Nodo* next);
+			~Nodo();		
+			void set_next(Nodo*);
+			Nodo* get_next();
+};
+
+class Lista{
+	private:	Nodo* first;
+			void remove_Node(Nodo* curr) {
+							if (curr){
+								remove_Node(curr->get_next());
+								deletedelete(curr);
+							}
+						     }
+	public:		Lista();
+			~Lista(){remove_Node(first);}
 };			
 
 class Connessione:public Nodo {
@@ -88,24 +108,4 @@ class Conn_Client:public Connessione {
 class Conn_Server:public Connessione {
 	public:		Conn_Server(int conn_id);
 			~Conn_Server();//close()
-};
-
-class Lista{
-	private:	Nodo* first;
-			void remove_Node(Nodo* curr) {
-							if (curr){
-								remove_Node(curr->get_next());
-								deletedelete(curr);
-							}
-						     }
-	public:		Lista();
-			~Lista(){remove_Node(first);}
-};
-
-class Nodo{
-	private:	Nodo* _next;
-	public:		Nodo(Nodo* next);
-			~Nodo();		
-			void set_next(Nodo*);
-			Nodo* get_next();
 };
