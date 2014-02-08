@@ -59,7 +59,7 @@ class ClientTCP:public Socket{
 			~ClientTCP();
 			bool connetti(Address* server);//connect()
 			bool close_connessione();
-			bool invia(char* msg);//
+			bool invia(char* msg);
 			char* ricevi()/*{
 					return connessione->ricevi();
 				      }*/;
