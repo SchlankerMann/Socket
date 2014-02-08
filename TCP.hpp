@@ -70,6 +70,7 @@ class ServerTCP:Public Socket
 			~ServerTCP();
 			Connessione* accettata();
 			void close_tutte_connessioni();
+			void invia_a_tutti(char* msg);
 };
 
 class Nodo{
