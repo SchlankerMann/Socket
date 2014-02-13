@@ -1,4 +1,4 @@
-//*
+/*
  * TCP.hpp
  * This file is part of Vallaurisoft
  *
@@ -22,16 +22,42 @@
 
 class Socket {
 	private: int sock_id;
-	Socket(int mode);//socket()
-	~Socket();//shutdown()
+	Socket(int mode){
+			    sock_id = socket(AF_INET,mode,0);
+			};
+	~Socket(){
+		      shutdown(sock_id, SHUT_RDWR);
+		 };
 };
 
 class socketUDP:public Socket{
-	private:
-	public:		SocketUDP();
-			~SocketUDP();
-			bool invia(char*,Address*);//send()
-			char* ricevi(Address*);//recv()
+	private:	int ret_code;
+	public:		
+			SocketUDP(){
+					sock_id = socket(AF_INET,SOCK_DGRAM,0);
+					return sock_id;
+				   };
+			~SocketUDP()
+			bool invia(char* msg,Address* dest){
+								dest_addr = dest->get_addr();
+								ret_code = send_to( sock_id,msg,strlen(msg)+1,0,(struct sockaddr*) dest_addr,(socklen_t)sizeof(dest_addr));
+								if(ret_code<0) return false;
+								      else return true;
+							   };
+			char* ricevi(Address* sender,int maxbuffer){
+							  char buffer[maxbuffer+1];
+							  struct sockaddr_in mitt_addr;
+							  int len_addr;
+							  int ret_code;
+							  
+							  len_addr = sizeof(struct sockaddr_in);
+							  ret_code = recvfrom(sock_id,buffer,maxbuffer,0,(struct sockaddr*)&mitt_addr(socklen_t*)&len_addr);
+							  if(ret_code <= 0) return NULL;   
+							  
+							  sender ->set_addr(&mitt_addr);
+							  buffer[ret_code] = '\0';
+							  return strdup(buffer);
+						     };
 }; 
 
 class ClientUDP:public Socket{
@@ -43,50 +69,74 @@ class ClientUDP:public Socket{
 
 class ServerUDP:public Socket{
 	private:
-	public:		ServerUDP(int port);
-			~ClientUDP();
+	public:		ServerUDP(int port){
+						Address*myself;
+						struct sockaddr_in* addr;
+						if(sock_id < 0) errore("Socket non aperto!\n",-1);
+						
+						myself = new Address("0.0.0.0",port);
+						addr = myself->get_addr();
+						
+						if( bind (sock_id,
+							(struct sockaddr*) addr,
+							(socklen_t) sizeof(struct sockaddr)))
+									return false;
+
+						delete(myself);
+						free(addr);
+					    };
+			~ServerUDP();
 
 };
 
 class SocketTCP::public Socket {
-	public:		int sockID;
-			SocketTCP(){
-					sockID = socket(AF_INET, SOCK_STREAM,0);
-					return sockID;
-				   }
-			~SocketTCP(int sockID){
-						  shutdown(sockID, SHUT_RDWR);
-					      }
+	public:		
+			SocketTCP();
+			~SocketTCP(){
+					shutdown(sock_id, SHUT_RDWR);
+				    };
 }; 
 
 class ClientTCP:public Socket{	
 	private:	Connessione* connessione;
+			int ret_code;
 	public:		ClientTCP();
 			~ClientTCP();
 			bool connetti(Address* server){
-							connessione=connect(sockID,server,sizeof(server);
-							return res;
-						      }
+							connessione=connect(sock_id,server,sizeof(server);
+							if(connessione<0) return false;
+							else return true;
+						      };
 			bool close_connessione(){
-						    close(connessione);
-						}
+						    ret_code=close(connessione);
+						    if(ret_code<0) return false;
+							else return true;
+						};
 			bool invia(char* msg){
-						 int ret_code;
 						 ret_code=send(connessione, msg, strlen(msg), 0);
-						 return ret_code;
-					     }
+						 if(ret_code<0) return false;
+							else return true;
+					     };
 			char* ricevi(int maxbuffer){
-					  int ret_code;
 					  char buffer[maxbuffer+1];
 					  ret_code = recv(connessione, buffer, maxbuffer, 0); 
-					  if(ret_code <= 0) return -1;
+					  if(ret_code <= 0) return null;
 					  buffer[ret_code]='\0';
-					  return buffer;
-				      }
+					  return strdup(buffer);
+				      };
 };
 class ServerTCP:Public Socket
 	private:	Lista* lista_connessioni;
-	public:		ServerTCP(int port);//bind()-listen()
+	public:		ServerTCP(int port){
+						myself_addr = (Addr*)malloc(sizeof(Addr));
+						myself_addr -> sin_family = AF_INET;
+						inet_aton("0.0.0.0", &(myself_addr -> sin_addr));
+						myself_addr -> sin_port = htons(port);
+						for(i=0;i<8;i++) myself_addr -> sin_zero[i] = 0;
+						
+						len_addr = sizeof(sockaddr_in);
+						ret_code = bind(sockID, (struct sockaddr *)myself_addr,(socklen_t) len_addr);
+					   };//bind()-listen()
 			~ServerTCP();
 			Connessione* accettata();
 			void close_tutte_connessioni();
@@ -110,7 +160,7 @@ class Lista{
 								remove_Node(curr->get_next());
 								deletedelete(curr);
 							}
-						     }
+						     };
 	public:		Lista();
 			~Lista(){remove_Node(first);}
 			Nodo* add_node(Nodo*);
