@@ -38,28 +38,43 @@ class ClientUDP:public Socket{
 	private:
 	public:		ClientUDP();
 			~ClientUDP();
-			
+
 };
 
 class ServerUDP:public Socket{
 	private:
 	public:		ServerUDP(int port);
 			~ClientUDP();
-			
+
 };
 
 class SocketTCP::public Socket {
-	public:		SocketTCP();
-			~SocketTCP();
+	public:		int sockID;
+			SocketTCP(){
+					sockID = socket(AF_INET, SOCK_STREAM,0);
+					return sockID;
+				   }
+			~SocketTCP(int sockID){
+						  shutdown(sockID, SHUT_RDWR);
+					      }
 }; 
 
 class ClientTCP:public Socket{	
 	private:	Connessione* connessione;
 	public:		ClientTCP();
 			~ClientTCP();
-			bool connetti(Address* server);//connect()
-			bool close_connessione();
-			bool invia(char* msg);
+			bool connetti(Address* server){
+							connessione=connect(sockID,server,sizeof(server);
+							return res;
+						      }
+			bool close_connessione(){
+						    close(connessione);
+						}
+			bool invia(char* msg){
+						 int ret_code=0;
+						 ret_code=send(connessione, msg, strlen(msg), 0);
+						 return ret_code;
+					     }
 			char* ricevi()/*{
 					return connessione->ricevi();
 				      }*/;
@@ -107,7 +122,7 @@ class Iterator{
 			Nodo* move_first();
 			bool is_done;
 };
-		
+
 class Connessione:public Nodo {
 	private:	int conn_id;
 	public:		Connessione(int conn_id);
@@ -115,7 +130,7 @@ class Connessione:public Nodo {
 			bool invia(char* msg);//send()
 			char* ricevi();//recv()
 };
-				
+
 class Conn_Client:public Connessione {
 	public:		Conn_Client(int sock_id);
 			~Conn_Client();//cippa
