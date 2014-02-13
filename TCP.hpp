@@ -1,4 +1,4 @@
-/*
+//*
  * TCP.hpp
  * This file is part of Vallaurisoft
  *
@@ -71,13 +71,18 @@ class ClientTCP:public Socket{
 						    close(connessione);
 						}
 			bool invia(char* msg){
-						 int ret_code=0;
+						 int ret_code;
 						 ret_code=send(connessione, msg, strlen(msg), 0);
 						 return ret_code;
 					     }
-			char* ricevi()/*{
-					return connessione->ricevi();
-				      }*/;
+			char* ricevi(int maxbuffer){
+					  int ret_code;
+					  char buffer[maxbuffer+1];
+					  ret_code = recv(connessione, buffer, maxbuffer, 0); 
+					  if(ret_code <= 0) return -1;
+					  buffer[ret_code]='\0';
+					  return buffer;
+				      }
 };
 class ServerTCP:Public Socket
 	private:	Lista* lista_connessioni;
