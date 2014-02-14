@@ -22,12 +22,15 @@
 
 class Socket {
 	private: int sock_id;
-	Socket(int mode){
-			    sock_id = socket(AF_INET,mode,0);
-			};
-	~Socket(){
-		      shutdown(sock_id, SHUT_RDWR);
-		 };
+	public:	 Socket(int mode){
+				    sock_id = socket(AF_INET,mode,0);
+				 };
+		 ~Socket(){
+			      shutdown(sock_id, SHUT_RDWR);
+			  };
+		 int getSockId(){
+		 			return sock_id;
+		 		};
 };
 
 class socketUDP:public Socket{
