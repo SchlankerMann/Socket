@@ -37,8 +37,7 @@ class socketUDP:public Socket{
 	private:	int ret_code;
 	public:		
 			SocketUDP(){
-					sock_id = socket(AF_INET,SOCK_DGRAM,0);
-					return sock_id;
+					
 				   };
 			~SocketUDP()
 			bool invia(char* msg,Address* dest){
@@ -92,7 +91,7 @@ class ServerUDP:public Socket{
 
 };
 
-class SocketTCP::public Socket {
+class SocketTCP::public Socket:Socket(SOCK_DGRAM) {
 	public:		
 			SocketTCP();
 			~SocketTCP(){
